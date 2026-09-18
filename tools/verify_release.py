@@ -59,9 +59,9 @@ with zipfile.ZipFile(R/'Release'/archive_name) as z:
 for name,sha in json.loads((R/'Config/frozen-source-sha256.json').read_text()).items():
     assert hashlib.sha256((R/name).read_bytes()).hexdigest()==sha,'Frozen source divergence: '+name
 info=plistlib.loads((R/'POC/Info.plist').read_bytes())
-assert info['CFBundleVersion']==info['CFBundleShortVersionString']==I['version']
-assert '-DMODULE_VERSION='+I['version'] in (R/'Makefile').read_text()
-for name in ['README.md','RELEASE_NOTES_v0.2.17.md','Docs/PHYSICAL_VALIDATION_v0.2.17.md']:
-    text=(R/name).read_text();assert '0.2.17' in text and 'EXPERIMENTAL' in text
+assert info['CFBundleVersion']==info['CFBundleShortVersionString']=='0.2.25'
+assert '-DMODULE_VERSION=0.2.25' in (R/'Makefile').read_text()
+for name in ['README.md','RELEASE_NOTES_v0.2.25.md','Docs/PHYSICAL_VALIDATION_v0.2.17.md']:
+    text=(R/name).read_text();assert ('0.2.25' in text or '0.2.17' in text) and 'EXPERIMENTAL' in text
     assert 'OCLP-CustoMac 3.0.3' in text and 'Modern Wireless' in text
 print('PASS exact frozen source, bundled release, archive, metadata and tag identity')

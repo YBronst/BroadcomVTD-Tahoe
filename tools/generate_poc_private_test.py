@@ -13,6 +13,6 @@ for a,b in [('static void configureCorrection(','static bool bindTarget('),
  ('static void wrapTxInit(', 'static uint32_t wrapReadReg(')]:
     assert s.count(a)==s.count(b)==1
     parts.append(s[s.index(a):s.index(b)])
-p=R/'build/poc-0.2.17/generated/FrontendPrivate.inc';p.parent.mkdir(parents=True,exist_ok=True)
+p=R/'build/poc-0.2.25/generated/FrontendPrivate.inc';p.parent.mkdir(parents=True,exist_ok=True)
 p.write_text('// Exact current Frontend.cpp bodies; no behavioral substitution.\n'+'\n'.join(parts))
 print('PASS actual private TX/reclaim/free/reset/init frontend extracted')

@@ -59,7 +59,7 @@ template<> int32_t original<int32_t>(Hook h,void *di,void *packet,uint32_t) {
     m->consumed=1;
     put<uint16_t>(di,0x6e,uint16_t((m->startIndex+m->count)&2047));return 0;
 }
-#include "../build/poc-0.2.17/generated/FrontendAdmission.inc"
+#include "../build/poc-0.2.25/generated/FrontendAdmission.inc"
 }
 
 int main(int argc,char **argv) {

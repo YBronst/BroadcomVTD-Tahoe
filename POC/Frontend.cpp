@@ -1329,7 +1329,7 @@ static void initialize() {
 
 static const char *disableArgs[]={"-brcmvtdoff"};
 PluginConfiguration ADDPR(config) {
-    "BroadcomVTD", parseModuleVersion("0.2.17"), LiluAPI::AllowNormal,
+    "BroadcomVTD", parseModuleVersion("0.2.25"), LiluAPI::AllowNormal,
     disableArgs, 1, nullptr, 0, nullptr, 0,
     KernelVersion::Tahoe, KernelVersion::Tahoe, bvp::initialize
 };

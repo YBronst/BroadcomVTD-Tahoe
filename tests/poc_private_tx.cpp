@@ -57,7 +57,7 @@ template<> bool original<bool>(Hook,void *);
 template<> void original<void>(Hook,void *);
 static void IODelay(unsigned);
 #define __builtin_return_address(n) reinterpret_cast<void *>(testCaller)
-#include "../build/poc-0.2.17/generated/FrontendPrivate.inc"
+#include "../build/poc-0.2.25/generated/FrontendPrivate.inc"
 #undef __builtin_return_address
 
 template<> void original<void>(Hook h,void *owner,void *packet,uint32_t send) {

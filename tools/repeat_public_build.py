@@ -3,7 +3,7 @@
 import hashlib,json,pathlib,subprocess,sys
 if sys.flags.optimize:
     raise SystemExit('Python optimization disables validation assertions; run without -O/PYTHONOPTIMIZE')
-R=pathlib.Path(__file__).resolve().parents[1];O=R/'build/poc-0.2.17';O.mkdir(parents=True,exist_ok=True)
+R=pathlib.Path(__file__).resolve().parents[1];O=R/'build/poc-0.2.25';O.mkdir(parents=True,exist_ok=True)
 def inventory(root):
     return {str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.rglob('*')) if p.is_file()}
 release=inventory(R/'Release');first=None

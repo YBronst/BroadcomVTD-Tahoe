@@ -12,12 +12,12 @@ while keeping **AppleVTD/IOMMU enabled**. It is an experimental Lilu plugin for
 the restored AirPortBrcmNIC driver. It selects its runtime path from the verified
 mapper identity—not by waiting for Wi-Fi or DMA errors.
 
-**v0.2.25 is a physically validated experimental release.** The project is
+**v0.2.17 is a physically validated experimental release.** The project is
 BroadcomVTD-Tahoe; the actual extension remains **BroadcomVTD.kext**, bundle ID
-`local.kgp.BroadcomVTD`. This exact tested binary retains version **0.2.25**;
+`local.kgp.BroadcomVTD`. This exact tested binary retains version **0.2.17**;
 there was no cosmetic 1.0.0 rename or rebuild.
 
-[Download the official v0.2.25 release](https://github.com/kgp-macPro/BroadcomVTD-Tahoe/releases/tag/v0.2.25).
+[Download the official v0.2.17 release](https://github.com/kgp-macPro/BroadcomVTD-Tahoe/releases/tag/v0.2.17).
 Its official ZIP contains the exact physically tested **BroadcomVTD.kext**.
 GitHub Actions CI artifacts are not substitutes.
 
@@ -61,7 +61,7 @@ AppleVTD is active. **`DisableIoMapper=false` permits but does not prove the map
 If BroadcomVTD verifies that actual system AppleVTD source for the supported
 target at runtime, it selects its **AppleVTD-aware corrective path**. If the
 source does not qualify, the setting alone cannot activate correction. The
-physically validated v0.2.25 configuration used `DisableIoMapper=false` **and**
+physically validated v0.2.17 configuration used `DisableIoMapper=false` **and**
 successfully verified system AppleVTD.
 
 This is BroadcomVTD-Tahoe's central purpose: the supported restored legacy
@@ -98,7 +98,7 @@ required target/ABI/provider checks. Merely finding an AppleVTD-named service
 is not sufficient. The internal names below describe BroadcomVTD, not OpenCore
 settings or named macOS operating modes.
 
-| Actual mapper selection for the supported target | BroadcomVTD behavior | Internal v0.2.25 diagnostic name |
+| Actual mapper selection for the supported target | BroadcomVTD behavior | Internal v0.2.17 diagnostic name |
 | --- | --- | --- |
 | Verified system AppleVTD source selected | **AppleVTD-aware corrective path.** Corrective RX/TX DMA, private-TX backing and lifetime handling are enabled. This is the physically validated path. | `APPLEVTD_CORRECTIVE_EXPERIMENTAL` |
 | No verified system AppleVTD source selected | **Native AirPortBrcmNIC path — BroadcomVTD correction inactive.** Native packet/DMA behavior continues; corrective RX mapping and private-TX lifetime handling are inactive. | `NATIVE_PASSTHROUGH` |
@@ -111,7 +111,7 @@ failure; corrective-path failures do not trigger a switch back to native mode.
 
 Selection occurs during target binding. A later binding opportunity can qualify
 a mapper that was not previously selected; this is identity-based binding, not
-network-health monitoring. Once corrective mode is selected, v0.2.25 does not
+network-health monitoring. Once corrective mode is selected, v0.2.17 does not
 downgrade it to native mode on an allocation failure, stop or failed rebind.
 
 `NATIVE_PASSTHROUGH` means only that BroadcomVTD's verified system AppleVTD source
@@ -119,7 +119,7 @@ was not selected and correction is inactive. It does **not** mean “AppleVTD is
 active and no problem was found,” IOMMU bypass, identity mapping or a generic
 direct-DMA mode. It does not prove that every system/device mapper is absent.
 The native path has source/host evidence; **it did not receive a new dedicated
-v0.2.25 physical campaign**.
+v0.2.17 physical campaign**.
 
 ### Hardware capability is not runtime mapper identity
 
@@ -136,16 +136,18 @@ does not create a mapper. These are distinct layers—not Apple “normal” and
 | Component | Tested configuration |
 | --- | --- |
 | Motherboard | ASUS WS X299 Sage/10G |
-| Wi-Fi | BCM943602CDP / BCM94360 (PCI `14e4:43ba`, `14e4:43a0`, `14e4:43a3`), D11 rev42/rev43/rev49 |
+| Wi-Fi | BCM943602CDP, PCI `14e4:43ba`, D11 rev49 |
 | macOS | **Tahoe 26.6.2 (25G83)**; project scope: Tahoe / Darwin 25.x |
 | Wireless restoration | **OCLP-CustoMac 3.0.3 with Modern Wireless root patches** |
 | Lilu | 1.7.2 used for physical validation |
 | IOMMU | AppleVTD enabled; `DisableIoMapper=false` |
-| BroadcomVTD | Exact frozen v0.2.25 release binary; no positive BroadcomVTD arguments |
+| BroadcomVTD | Exact frozen v0.2.17 release binary; no positive BroadcomVTD arguments |
 
-BCM943602CDP and BCM94360 (`14e4:43a0` / `14e4:43a3` / `14e4:43ba`) are supported
-by BroadcomVTD for D11 revisions 42, 43, and 49. Other compatible legacy Broadcom
-hardware must satisfy the target, ABI, private-layout, provider and runtime mapper gates.
+BCM943602CDP is the **physically validated reference**, not a device-only
+authorization rule. Other compatible legacy Broadcom hardware is not
+automatically excluded, but must satisfy the target, ABI, private-layout,
+provider and runtime mapper gates. This is not a universal BCM94360-family
+support or physical-validation claim.
 
 A matching card model alone is insufficient. The physically pinned
 AirPortBrcmNIC UUID is `E4678FEB-1DC1-35CC-9306-48021083D04A`; its exact supported
@@ -171,7 +173,7 @@ ABI must also match. See [scope and provenance](Docs/PROVENANCE.md).
    experimental limitation below before changing a working system.
 2. Establish the supported Tahoe Modern Wireless environment separately. This
    project neither supplies OCLP payloads nor changes its patch/security setup.
-3. Use **BroadcomVTD-Tahoe-v0.2.25.zip from the project's Release assets**, not a
+3. Use **BroadcomVTD-Tahoe-v0.2.17.zip from the project's Release assets**, not a
    GitHub Actions build. Verify the executable identity below after extraction.
 4. Manually copy `BroadcomVTD.kext` to `EFI/OC/Kexts`. Ensure Lilu is present and
    enabled as described above. Add BroadcomVTD under OpenCore `Kernel -> Add`
@@ -231,7 +233,7 @@ individual NoCredit event was separately traced to completion. RX accounted for
 ### Sleep/Wake: the important change
 
 Earlier experiments could conservatively retain an OLD private TX mapping
-across certain native bulk resets. v0.2.25 generalized the reset lifetime model,
+across certain native bulk resets. v0.2.17 generalized the reset lifetime model,
 not a Sleep-, FIFO- or application-specific exception. Native code still owns
 packet free/requeue behavior; BroadcomVTD ends only the eligible OLD DMA lifetime.
 
@@ -268,13 +270,13 @@ production-safety claim. Use only with informed acceptance of this limitation.
 ## Exact release identity
 
 ```text
-BroadcomVTD.kext — local.kgp.BroadcomVTD — 0.2.25
+BroadcomVTD.kext — local.kgp.BroadcomVTD — 0.2.17
 x86_64 executable: 147408 bytes
 SHA-256: 2a8f9641a9c9856b1e45899f31332a68ad2cf519e94951ca128bb3f262c3c349
 UUID: D0B214B8-F096-3BC6-99AD-F1E9D8E788B6
 ```
 
-[Release notes](RELEASE_NOTES_v0.2.25.md) · [Build and CI](Docs/BUILDING.md) ·
+[Release notes](RELEASE_NOTES_v0.2.17.md) · [Build and CI](Docs/BUILDING.md) ·
 [Architecture](Docs/ARCHITECTURE.md) · [Provenance](Docs/PROVENANCE.md) ·
 [License](LICENSE)
 

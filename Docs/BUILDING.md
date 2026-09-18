@@ -7,7 +7,7 @@
 containing that exact tested bundle. Physical validation applies to the KEXT,
 not the ZIP container. CI/build output must never replace the tested KEXT inside
 the release package.
-`build/poc-0.2.17/BroadcomVTD.kext` is a **CI BUILD — NOT PHYSICALLY VALIDATED**.
+`build/poc-0.2.25/BroadcomVTD.kext` is a **CI BUILD — NOT PHYSICALLY VALIDATED**.
 No make target writes into Release/.
 
 The `POC/` source organization is retained. Runtime files are byte-identical to
@@ -110,7 +110,7 @@ for runner reference.
   live Tahoe kernel/OCLP provider set or prove live linking/DMA safety.
 - The frozen `POC/Module.cpp` retains its historical `KMOD_EXPLICIT_DECL`
   string `0.2.5`. The physical distribution's plist versions, Lilu module
-  version and public release are **0.2.17**. This embedded legacy field is
+  version and public release are **0.2.25**. This embedded legacy field is
   documented rather than cosmetically changed in the tested runtime source.
 - The rev49 reset/DISABLED/300-us contract remains experimental. Host tests,
   successful builds and a green badge are not hardware release authority.

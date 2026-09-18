@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run actual-source host models and public synthetic/static tests; no private captures."""
 import json, os, pathlib, re, subprocess, sys
-R=pathlib.Path(__file__).resolve().parents[1];O=R/'build/poc-0.2.17'
+R=pathlib.Path(__file__).resolve().parents[1];O=R/'build/poc-0.2.25'
 O.mkdir(parents=True,exist_ok=True)
 cc=subprocess.check_output(['xcrun','--find','clang++'],text=True).strip()
 sdk=subprocess.check_output(['xcrun','--sdk','macosx','--show-sdk-path'],text=True).strip()
@@ -54,7 +54,7 @@ with (O/'host-tests.log').open('w') as log:
         if 'unittest' in cmd:
             match=re.search(r'Ran (\d+) tests',run.stdout);python_tests=int(match[1]) if match else 0
         if run.returncode:
-            print('FAIL',relative,'see build/poc-0.2.17/host-tests.log');raise SystemExit(run.returncode)
+            print('FAIL',relative,'see build/poc-0.2.25/host-tests.log');raise SystemExit(run.returncode)
 summary=dict(result='PASS',private_cases=len(cases),private_runs=2*len(cases),
  private_checks=sum(x['checks'] for x in results if len(x['command'])==2 and 'poc-private-' in x['command'][0]),
  python_tests=python_tests,commands=len(results),sanitizers='ASan + UBSan',

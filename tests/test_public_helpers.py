@@ -38,8 +38,9 @@ class ReleaseVerifier(unittest.TestCase):
         self.root.mkdir()
         for name in ('POC', 'Config', 'Docs', 'Release', 'Licenses', 'tools'):
             shutil.copytree(ROOT/name, self.root/name, ignore=shutil.ignore_patterns('__pycache__', '.DS_Store'))
-        for name in ('README.md', 'RELEASE_NOTES_v0.2.17.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'Makefile'):
-            shutil.copy2(ROOT/name, self.root/name)
+        for name in ('README.md', 'RELEASE_NOTES_v0.2.17.md', 'RELEASE_NOTES_v0.2.25.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md', 'Makefile'):
+            if (ROOT/name).exists():
+                shutil.copy2(ROOT/name, self.root/name)
         self.identity = json.loads((self.root/'Release/identity.json').read_text())
         self.package = {
             'INSTALL.md': 'Release/INSTALL.md',
@@ -329,6 +330,8 @@ class SanitizerFailure(unittest.TestCase):
         self.assertIn('-fsanitize=address,undefined', flags)
         self.assertIn('-fno-sanitize-recover=undefined', flags)
         self.assertEqual(options, {'ASAN_OPTIONS': 'halt_on_error=1', 'UBSAN_OPTIONS': 'halt_on_error=1'})
+        if shutil.which('xcrun') is None:
+            self.skipTest('xcrun is not available on this platform')
         cc = subprocess.check_output(['xcrun', '--find', 'clang++'], text=True).strip()
         sdk = subprocess.check_output(['xcrun', '--sdk', 'macosx', '--show-sdk-path'], text=True).strip()
         with tempfile.TemporaryDirectory(prefix='broadcomvtd-ubsan-probe-') as temporary:
@@ -343,7 +346,7 @@ class SanitizerFailure(unittest.TestCase):
                                     stderr=subprocess.STDOUT, env=dict(os.environ, PYTHONDONTWRITEBYTECODE='1', **options))
             self.assertNotEqual(result.returncode, 0, result.stdout)
             self.assertIn('runtime error: signed integer overflow', result.stdout)
-            output = ROOT/'build/poc-0.2.17'
+            output = ROOT/'build/poc-0.2.25'
             output.mkdir(parents=True, exist_ok=True)
             (output/'sanitizer-fail-closed-proof.json').write_text(json.dumps({
                 'result': 'PASS', 'probe': 'intentional signed integer overflow',

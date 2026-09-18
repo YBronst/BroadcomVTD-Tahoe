@@ -37,7 +37,7 @@ template<typename T> static T original(Hook,void *di,uint32_t range) {
 static void notify(void *,void *,uint32_t status) {assert(!status);++notifications;}
 // The ONLY replacement in these extracted source slices is the host return PC.
 #define __builtin_return_address(n) reinterpret_cast<void *>(testCaller)
-#include "../build/poc-0.2.17/generated/FrontendQualification.inc"
+#include "../build/poc-0.2.25/generated/FrontendQualification.inc"
 #undef __builtin_return_address
 }
 

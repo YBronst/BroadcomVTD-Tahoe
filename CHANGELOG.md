@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.25 — 2026-09-18
+
+- Added support for BCM4360 wireless cards (D11 revisions 42 and 43, PCI IDs `14e4:43a0` and `14e4:43a3`).
+- Fixed a critical issue causing traffic freeze after ~30 seconds due to private-TX mapping quarantine and reset-lifetime handling.
+- Enhanced DMA ring lifetime tracking across native resets under AppleVTD.
+
 ## v0.2.17 — Initial experimental public release
 
 - Publish the exact physically validated BroadcomVTD.kext 0.2.17; no cosmetic

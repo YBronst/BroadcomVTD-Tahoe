@@ -7,8 +7,8 @@
 <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
 <key>CFBundleName</key><string>BroadcomVTD</string>
 <key>CFBundlePackageType</key><string>KEXT</string>
-<key>CFBundleShortVersionString</key><string>0.2.17</string>
-<key>CFBundleVersion</key><string>0.2.17</string>
+<key>CFBundleShortVersionString</key><string>0.2.25</string>
+<key>CFBundleVersion</key><string>0.2.25</string>
 <key>OSBundleRequired</key><string>Root</string>
 <key>OSBundleLibraries</key><dict>
 <key>as.vit9696.Lilu</key><string>1.7.2</string>

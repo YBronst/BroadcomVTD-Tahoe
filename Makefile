@@ -7,12 +7,12 @@ export SDKROOT := $(shell xcrun --sdk macosx --show-sdk-path)
 CXX := $(TC)/clang++
 LD := $(TC)/ld
 # Never build into Release/: that directory holds the physically tested artifact.
-OUT := $(PROJECT)/build/poc-0.2.17
+OUT := $(PROJECT)/build/poc-0.2.25
 KEXT := $(OUT)/BroadcomVTD.kext
 FLAGS := -target x86_64-apple-macos10.15 -std=c++14 -mkernel -nostdinc -nostdinc++ \
  -isystem $(SDK)/Headers -isystem $(LILU) -IConfig -IPOC \
  -DKERNEL -DKERNEL_PRIVATE -DDRIVER_PRIVATE -DAPPLE -D__APPLE__ \
- -DPRODUCT_NAME=BroadcomVTD -DMODULE_VERSION=0.2.17 \
+ -DPRODUCT_NAME=BroadcomVTD -DMODULE_VERSION=0.2.25 \
  -O2 -fno-exceptions -fno-rtti -fno-builtin -fno-stack-protector \
  -fno-asynchronous-unwind-tables -fno-threadsafe-statics -mno-red-zone \
  -mno-sse -mno-mmx -fvisibility=hidden -Wall -Wextra -Werror \

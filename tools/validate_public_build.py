@@ -15,7 +15,7 @@ if sys.flags.optimize:
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 TC=pathlib.Path(subprocess.check_output(['xcrun','--find','clang++'],text=True).strip()).parent
-BUILD=ROOT/'build/poc-0.2.17'
+BUILD=ROOT/'build/poc-0.2.25'
 KEXT=BUILD/'BroadcomVTD.kext'
 BIN=KEXT/'Contents/MacOS/BroadcomVTD'
 
@@ -34,7 +34,7 @@ def symbols(path=None, blob=None):
 
 info=plistlib.loads((KEXT/'Contents/Info.plist').read_bytes())
 assert info['CFBundleIdentifier']=='local.kgp.BroadcomVTD'
-assert info['CFBundleVersion']==info['CFBundleShortVersionString']=='0.2.17'
+assert info['CFBundleVersion']==info['CFBundleShortVersionString']=='0.2.25'
 assert info['OSBundleLibraries']['as.vit9696.Lilu']=='1.7.2'
 subprocess.run(['/usr/bin/codesign','--verify','--strict',str(KEXT)],check=True)
 signature_output=subprocess.run(['/usr/bin/codesign','--display','--verbose=4',str(KEXT)],
