@@ -1,18 +1,20 @@
 {
+  "version": "0.2.27",
   "project": "BroadcomVTD-Tahoe",
-  "version": "0.2.17",
-  "tag": "v0.2.17",
+  "tag": "v0.2.27",
+  "status": "CI_BUILD",
+  "physical_test": false,
+  "release_authority": false,
   "kext": "BroadcomVTD.kext",
   "identifier": "local.kgp.BroadcomVTD",
-  "executable_bytes": 147408,
-  "executable_sha256": "2a8f9641a9c9856b1e45899f31332a68ad2cf519e94951ca128bb3f262c3c349",
-  "uuid": "D0B214B8-F096-3BC6-99AD-F1E9D8E788B6",
-  "physical_test": "PASS",
-  "status": "EXPERIMENTAL",
-  "release_authority": false,
+  "executable_bytes": 147424,
+  "executable_sha256": "10404d39e9bf899f1c841c2a4e91a8a9445f6fe610462f6af150e5b05eb80d97",
+  "uuid": "9441D2DE-B74E-3FD8-889D-568F1AC70049",
   "bundle_files": {
-    "Contents/Info.plist": "67342b7e7aefa716318b03117a606ff84d84570da4bedef8b67ad7bbf50c1b72",
-    "Contents/MacOS/BroadcomVTD": "2a8f9641a9c9856b1e45899f31332a68ad2cf519e94951ca128bb3f262c3c349",
+    "Contents/Info.plist": "4ba82ea06acbec665a54602a6e1df1370fb54648628f634efda2f953ee82c420",
+    "Contents/MacOS/BroadcomVTD": "10404d39e9bf899f1c841c2a4e91a8a9445f6fe610462f6af150e5b05eb80d97",
     "Contents/_CodeSignature/CodeResources": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
-  }
+  },
+  "generated_by": "BroadcomVTD-TahoeBuilder",
+  "generated_at_utc": "2026-09-24T05:24:11.213529+00:00"
 }

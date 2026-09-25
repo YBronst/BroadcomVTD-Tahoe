@@ -38,7 +38,7 @@ enum Stage : uint32_t { Mode=1, BackingLeased, AssociationDetached,
 constexpr unsigned ExperimentalDrainUS=300;
 inline bool experimentalPredicate(bool gate,bool exclusive,
     uint32_t revision,uint32_t count,bool returned,bool seen,uint32_t status,bool halted) {
-    return gate && exclusive && revision==49 && count &&
+    return gate && exclusive && (revision==42 || revision==43 || revision==49) && count &&
         returned && seen && status!=0xffffffffU && !(status&0xf0000000U) && !halted;
 }
 bool enabled();

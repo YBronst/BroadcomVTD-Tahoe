@@ -9,7 +9,7 @@ a=p.parse_args()
 R=pathlib.Path(__file__).resolve().parents[1]
 I=json.loads((R/'Release/identity.json').read_text())
 assert I['project']=='BroadcomVTD-Tahoe' and I['kext']=='BroadcomVTD.kext'
-assert I['version']=='0.2.17' and I['tag']=='v'+I['version']
+assert I['version']=='0.2.27' and I['tag']=='v'+I['version']
 if a.require_tag:
     assert os.environ.get('GITHUB_REF_TYPE')=='tag','--require-tag requires GITHUB_REF_TYPE=tag'
 if a.require_tag or os.environ.get('GITHUB_REF_TYPE')=='tag':
@@ -32,7 +32,7 @@ def bundle(read):
     assert info['CFBundleExecutable']=='BroadcomVTD' and info['OSBundleLibraries']['as.vit9696.Lilu']=='1.7.2'
     for name,sha in I['bundle_files'].items():assert hashlib.sha256(read(name)).hexdigest()==sha,name
     binary=read('Contents/MacOS/BroadcomVTD')
-    assert len(binary)==I['executable_bytes']==147408
+    assert len(binary)==I['executable_bytes']==147424
     assert hashlib.sha256(binary).hexdigest()==I['executable_sha256']
     macho(binary)
 bundle(lambda name:(R/'Release/BroadcomVTD.kext'/name).read_bytes())
@@ -42,6 +42,7 @@ assert hashlib.sha256((R/'Release'/archive_name).read_bytes()).hexdigest()==arch
 packaged_files={
     'INSTALL.md':'Release/INSTALL.md',
     'RELEASE_NOTES_v'+I['version']+'.md':'RELEASE_NOTES_v'+I['version']+'.md',
+    'README.md':'README.md',
     'LICENSE':'LICENSE',
     'THIRD_PARTY_NOTICES.md':'THIRD_PARTY_NOTICES.md',
     'Licenses/Lilu-BSD-3-Clause.txt':'Licenses/Lilu-BSD-3-Clause.txt',
@@ -59,9 +60,9 @@ with zipfile.ZipFile(R/'Release'/archive_name) as z:
 for name,sha in json.loads((R/'Config/frozen-source-sha256.json').read_text()).items():
     assert hashlib.sha256((R/name).read_bytes()).hexdigest()==sha,'Frozen source divergence: '+name
 info=plistlib.loads((R/'POC/Info.plist').read_bytes())
-assert info['CFBundleVersion']==info['CFBundleShortVersionString']==I['version']
-assert '-DMODULE_VERSION='+I['version'] in (R/'Makefile').read_text()
-for name in ['README.md','RELEASE_NOTES_v0.2.17.md','Docs/PHYSICAL_VALIDATION_v0.2.17.md']:
-    text=(R/name).read_text();assert '0.2.17' in text and 'EXPERIMENTAL' in text
+assert info['CFBundleVersion']==info['CFBundleShortVersionString']=='0.2.27'
+assert '-DMODULE_VERSION=0.2.27' in (R/'Makefile').read_text()
+for name in ['README.md','RELEASE_NOTES_v0.2.27.md','Docs/PHYSICAL_VALIDATION_v0.2.27.md']:
+    text=(R/name).read_text();assert '0.2.27' in text and 'EXPERIMENTAL' in text
     assert 'OCLP-CustoMac 3.0.3' in text and 'Modern Wireless' in text
-print('PASS exact frozen source, bundled release, archive, metadata and tag identity')
+print('PASS exact frozen source v0.2.27, bundled release, archive, metadata and tag identity')

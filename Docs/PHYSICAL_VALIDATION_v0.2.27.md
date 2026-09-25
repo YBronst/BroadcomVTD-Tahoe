@@ -1,4 +1,4 @@
-# BroadcomVTD 0.2.17 — physical validation PASS
+# BroadcomVTD 0.2.27 — physical validation PASS
 
 Physically validated experimental release, frozen after independent source
 review and controlled KGP testing. This is a public adaptation of the frozen

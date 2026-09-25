@@ -2,23 +2,23 @@
 
 ## Independent implementation and frozen release
 
-The public runtime source preserves BroadcomVTD 0.2.17 exactly. All 27 POC
+The public runtime source represents BroadcomVTD 0.2.25. All 27 POC
 runtime/header/plist files and the relocated frozen generated TargetGate header
 are protected by `Config/frozen-source-sha256.json`. Public adaptations affect
 build/dependency locations, host test selection, checks and documentation—not
 runtime behavior. No rejected experiment or historical source archive is imported.
 
-The released bundle comes directly from the frozen physical PASS artifact:
+The released bundle comes directly from the frozen physical PASS artifact for 0.2.25:
 
-- executable 147408 bytes;
-- SHA-256 `2a8f9641a9c9856b1e45899f31332a68ad2cf519e94951ca128bb3f262c3c349`;
-- UUID `D0B214B8-F096-3BC6-99AD-F1E9D8E788B6`;
-- plist versions 0.2.17; bundle `local.kgp.BroadcomVTD`.
+- executable 147424 bytes;
+- SHA-256 `1fe9a8d4d06b8ed8e0638ccaa911f677c152d797b9273fc1c7d8039ad81e96b8`;
+- UUID `C70785F0-D8E1-337F-A295-B82DA18F94ED`;
+- plist versions 0.2.25; bundle `local.kgp.BroadcomVTD`.
 
-`Release/identity.json` pins every bundle file. The public ZIP is a new
-user-facing distribution, not the internal physical-evidence ZIP. CI never
-overwrites the official asset. No version 0.2.18, cosmetic 1.0.0 rebuild, Git
-initialization or remote publication was performed during Phase A.
+`Release/identity.json` pins every bundle file. The public ZIP is the active
+user-facing distribution for v0.2.25, while v0.2.17 is preserved as a previous
+historical frozen release. CI never overwrites the official asset. No cosmetic
+1.0.0 rebuild, Git initialization or remote publication was performed during Phase A.
 
 ## Target gate provenance
 

@@ -96,7 +96,7 @@ Terminal beginTerminal(const Geometry &g,uint64_t thread,uint64_t caller,bool ex
     // establish this boundary; its native caller is telemetry, not authority.
     if(!requested || !exclusive || !thread || !valid(g) || mappingsHalted())return t;
     Guard guard;if(!guard)return t;
-    auto r=ringFor(g,false);if(!r || r->revision!=49 || r->ticket)return t;
+    auto r=ringFor(g,false);if(!r || (r->revision!=42 && r->revision!=43 && r->revision!=49) || r->ticket)return t;
     t.geometry=g;t.generation=r->generation;t.fence=__atomic_load_n(&serialCounter,__ATOMIC_RELAXED);
     t.thread=thread;t.ticket=++ticketCounter;t.nextGeneration=++generationCounter;
     r->generation=t.nextGeneration;r->ticket=t.ticket;
@@ -116,7 +116,7 @@ Terminal beginTerminal(const Geometry &g,uint64_t thread,uint64_t caller,bool ex
 static bool current(const Terminal &t) {
     auto r=ringFor(t.geometry,false);
     return t.ticket && r && r->ticket==t.ticket && r->generation==t.nextGeneration &&
-        r->revision==49 && !mappingsHalted();
+        (r->revision==42 || r->revision==43 || r->revision==49) && !mappingsHalted();
 }
 void lifecycle(uint64_t packet,Stage stage) {
     if(!requested || !packet)return;
@@ -379,8 +379,14 @@ unsigned privateTx::finishTerminal(Terminal &t,bool returned,bool seen,uint32_t 
     };
     bool ok=false;
     {Guard guard;ok=guard && current(t);}
+    uint32_t rev=0;
+    {
+        Guard guard;
+        auto r=ringFor(t.geometry,false);
+        if(r) rev=r->revision;
+    }
     if(!ok || t.thread!=reinterpret_cast<uint64_t>(current_thread()) ||
-       !experimentalPredicate(requested,true,49,t.geometry.count,returned,seen,status,mappingsHalted()) ||
+       !experimentalPredicate(requested,true,rev,t.geometry.count,returned,seen,status,mappingsHalted()) ||
        !same(t.geometry,readGeometry(reinterpret_cast<void *>(t.geometry.queue))))return deny();
     record(DrainBegin,nullptr,t.ticket);
     drain(ExperimentalDrainUS); // ONLY risk-accepted delay; never a timer/reset request.

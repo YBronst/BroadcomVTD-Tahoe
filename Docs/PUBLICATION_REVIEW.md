@@ -11,7 +11,7 @@ KGP and ChatGPT review precedes any publication or manual deployment decision.
 
 ## Artifact separation
 
-- Release: exact frozen physical PASS BroadcomVTD.kext 0.2.17, copied unchanged.
+- Release: exact frozen physical PASS BroadcomVTD.kext 0.2.25, copied unchanged (0.2.17 preserved as historical release).
 - Public build output: isolated CI build, not the source of the release asset.
 - Source: 27 runtime/header/plist files plus exact frozen TargetGate protected
   by SHA-256 inventory; no runtime semantic edits.
@@ -56,7 +56,7 @@ the historical baseline, not as the current test totals.
 | Repeat CI builds | Two forced same-environment bundles byte-identical; not physically validated CI artifacts |
 | Frozen runtime source / TargetGate | All 28 protected inventory entries unchanged |
 | Final package consistency | **PASS**: all packaged repository files byte-identical; no duplicate/missing/extra members |
-| Tested KEXT outside / extracted from ZIP | **PASS**: exact complete frozen bundle inventory, 147408-byte executable, SHA-256 and UUID |
+| Tested KEXT outside / extracted from ZIP | **PASS**: exact complete frozen bundle inventory, 147424-byte executable, SHA-256 and UUID |
 | Final SHA256SUMS / hardened verify_release.py | **PASS**; normal and exact required-tag environment validation |
 
 The current 70 public Python tests are distinct from the historical 70 internal
@@ -97,7 +97,7 @@ That earlier snapshot predated the reviewed publication-only documentation edits
   or co-development. Lilu/MacKernelSDK notices retained; project license does not
   relicense target driver fingerprints or external dependencies.
 - Frozen legacy embedded KMOD 0.2.5 field is disclosed in BUILDING.md; released
-  plist/Lilu/public version stays 0.2.17. No cosmetic runtime edit was made.
+  plist/Lilu/public version is 0.2.25. No cosmetic runtime edit was made.
 - Runtime native-passthrough behavior has source/host coverage, not a newly
   claimed dedicated .17 hardware campaign.
 - Rev49 remains **formal C / informal C+, EXPERIMENTAL**:

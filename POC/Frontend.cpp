@@ -1294,7 +1294,11 @@ static void loaded(void *, KernelPatcher &patcher, size_t id, mach_vm_address_t 
         ROUTE(TxResume), ROUTE(TxFlush), ROUTE(TxFlushClear), ROUTE(TxRotate), ROUTE(TxRewind), ROUTE(TxPioLoopback), ROUTE(TxSync)
 #undef ROUTE
     };
+#if defined(LILU_VERSION)
+    if(!patcher.routeMultipleLong(id,routes,HookCount,base,size)) { patcher.clearError(); setGate(4); return; }
+#else
     if(!patcher.routeMultiple(id,routes,HookCount,base,size)) { patcher.clearError(); setGate(4); return; }
+#endif
     for(auto p:originals) if(!p) { setGate(4); return; }
     setGate(5); __atomic_store_n(&armed,true,__ATOMIC_RELEASE);
     acquisition(RoutesInstalled,HookCount);
@@ -1329,7 +1333,7 @@ static void initialize() {
 
 static const char *disableArgs[]={"-brcmvtdoff"};
 PluginConfiguration ADDPR(config) {
-    "BroadcomVTD", parseModuleVersion("0.2.17"), LiluAPI::AllowNormal,
+    "BroadcomVTD", parseModuleVersion("0.2.27"), LiluAPI::AllowNormal,
     disableArgs, 1, nullptr, 0, nullptr, 0,
     KernelVersion::Tahoe, KernelVersion::Tahoe, bvp::initialize
 };
