@@ -8,13 +8,13 @@
   "kext": "BroadcomVTD.kext",
   "identifier": "local.kgp.BroadcomVTD",
   "executable_bytes": 147424,
-  "executable_sha256": "10404d39e9bf899f1c841c2a4e91a8a9445f6fe610462f6af150e5b05eb80d97",
-  "uuid": "9441D2DE-B74E-3FD8-889D-568F1AC70049",
+  "executable_sha256": "95f540036869cc8bca6cc0973decf7cd239dd1b15d246cce908f88164d188703",
+  "uuid": "8F959AAF-1540-3105-BB7E-0AB79297EE42",
   "bundle_files": {
     "Contents/Info.plist": "4ba82ea06acbec665a54602a6e1df1370fb54648628f634efda2f953ee82c420",
-    "Contents/MacOS/BroadcomVTD": "10404d39e9bf899f1c841c2a4e91a8a9445f6fe610462f6af150e5b05eb80d97",
+    "Contents/MacOS/BroadcomVTD": "95f540036869cc8bca6cc0973decf7cd239dd1b15d246cce908f88164d188703",
     "Contents/_CodeSignature/CodeResources": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
   },
   "generated_by": "BroadcomVTD-TahoeBuilder",
-  "generated_at_utc": "2026-09-24T05:24:11.213529+00:00"
+  "generated_at_utc": "2026-10-04T17:26:06.141889+00:00"
 }
