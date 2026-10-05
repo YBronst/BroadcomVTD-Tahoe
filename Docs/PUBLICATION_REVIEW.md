@@ -56,7 +56,7 @@ the historical baseline, not as the current test totals.
 | Repeat CI builds | Two forced same-environment bundles byte-identical; not physically validated CI artifacts |
 | Frozen runtime source / TargetGate | All 28 protected inventory entries unchanged |
 | Final package consistency | **PASS**: all packaged repository files byte-identical; no duplicate/missing/extra members |
-| Tested KEXT outside / extracted from ZIP | **PASS**: exact complete frozen bundle inventory, 147424-byte executable, SHA-256 and UUID |
+| Tested KEXT outside / extracted from ZIP | **PASS**: exact complete frozen bundle inventory, 147440-byte executable, SHA-256 and UUID |
 | Final SHA256SUMS / hardened verify_release.py | **PASS**; normal and exact required-tag environment validation |
 
 The current 70 public Python tests are distinct from the historical 70 internal

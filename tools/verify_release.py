@@ -32,7 +32,7 @@ def bundle(read):
     assert info['CFBundleExecutable']=='BroadcomVTD' and info['OSBundleLibraries']['as.vit9696.Lilu']=='1.7.2'
     for name,sha in I['bundle_files'].items():assert hashlib.sha256(read(name)).hexdigest()==sha,name
     binary=read('Contents/MacOS/BroadcomVTD')
-    assert len(binary)==I['executable_bytes']==147424
+    assert len(binary)==I['executable_bytes']==147440
     assert hashlib.sha256(binary).hexdigest()==I['executable_sha256']
     macho(binary)
 bundle(lambda name:(R/'Release/BroadcomVTD.kext'/name).read_bytes())

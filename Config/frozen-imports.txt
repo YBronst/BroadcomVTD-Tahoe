@@ -1,4 +1,5 @@
 _IODelay
+_IOLog
 _IOMallocAligned
 _OSBacktrace
 _OSReportWithBacktrace

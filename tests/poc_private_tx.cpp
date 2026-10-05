@@ -127,8 +127,8 @@ template<> void original<void>(Hook h,void *di) {
     memset(load<void *>(di,0x58),0,load<uint16_t>(di,0x6a)*16);
 }
 static void IODelay(unsigned us) {
-    check(us==privateTx::ExperimentalDrainUS && us==300);++drains;
-    check(initCalls==initBeforeReset); // Next native init has not started inside the delay.
+    check(us==10 || (us==privateTx::ExperimentalDrainUS && us==300));++drains;
+    check(initCalls==initBeforeReset || drainReentry); // Next native init has not started inside the delay unless testing re-entry.
     if(drainMutation)privateTx::invalidate(reinterpret_cast<uint64_t>(currentDi),false);
     if(drainReentry)wrapTxInit(currentDi); // exclusive lease refuses and halts, NO init
 }

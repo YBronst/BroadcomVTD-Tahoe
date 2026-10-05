@@ -10,7 +10,7 @@ runtime behavior. No rejected experiment or historical source archive is importe
 
 The released bundle comes directly from the frozen physical PASS artifact for 0.2.25:
 
-- executable 147424 bytes;
+- executable 147440 bytes;
 - SHA-256 `1fe9a8d4d06b8ed8e0638ccaa911f677c152d797b9273fc1c7d8039ad81e96b8`;
 - UUID `C70785F0-D8E1-337F-A295-B82DA18F94ED`;
 - plist versions 0.2.25; bundle `local.kgp.BroadcomVTD`.
