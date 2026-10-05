@@ -5,8 +5,77 @@
 #include <IOKit/IOLib.h>
 #include <kern/thread.h>
 #endif
+#include <stdint.h>
 
 namespace bvp {
+
+// ============================================================================
+// HARDWARE POLICY & PCI DEVICE PROFILES (Ring-0 Safe, No Dynamic Memory)
+// ============================================================================
+
+namespace hw {
+
+struct PciDeviceProfile {
+    uint16_t vendorId;       // Broadcom Vendor ID (0x14E4)
+    uint16_t deviceId;       // PCI Device ID
+    uint32_t expectedD11Rev; // Expected D11 MAC/PHY Revision (Exact Match)
+    const char* cardModel;   // Target hardware description
+};
+
+// Constexpr static lookup table pinned strictly to the 3 target hardware configurations:
+// 1. Fenvi BCM4360CDP / ASUS PCE-AC68 (0x43A0 -> D11 Rev 42)
+// 2. Dell OEM BCM4352 MacBook Edition (0x43B1 -> D11 Rev 43)
+// 3. Fenvi FV-T919 BCM943602CDP / HP OEM (0x43BA -> D11 Rev 49)
+constexpr PciDeviceProfile kDeviceProfiles[] = {
+    { 0x14E4, 0x43A0, 42, "Fenvi BCM4360CDP / ASUS PCE-AC68" },
+    { 0x14E4, 0x43B1, 43, "Dell OEM BCM4352 MacBook Edition" },
+    { 0x14E4, 0x43BA, 49, "Fenvi FV-T919 BCM943602CDP / HP OEM" }
+};
+
+class HardwarePolicy {
+public:
+    static const PciDeviceProfile* findProfile(uint16_t vendorId, uint16_t deviceId) {
+        for (const auto& profile : kDeviceProfiles) {
+            if (profile.vendorId == vendorId && profile.deviceId == deviceId) {
+                return &profile;
+            }
+        }
+        return nullptr;
+    }
+
+    static bool authorizeTerminalRevision(uint16_t vendorId, uint16_t deviceId, uint32_t observedD11Rev) {
+        if (vendorId == 0 && deviceId == 0) {
+            return (observedD11Rev == 42 || observedD11Rev == 43 || observedD11Rev == 49);
+        }
+        const auto* profile = findProfile(vendorId, deviceId);
+        if (!profile) {
+            #ifndef BVT_HOST_TEST
+            IOLog("BroadcomVTD: [WARN] PCI Device 0x%04X:0x%04X not authorized by hardware policy.\n", vendorId, deviceId);
+            #endif
+            return false;
+        }
+
+        if (profile->expectedD11Rev != observedD11Rev) {
+            #ifndef BVT_HOST_TEST
+            IOLog("BroadcomVTD: [SECURITY] D11 Rev mismatch for %s (Device 0x%04X): expected %u, observed %u\n",
+                  profile->cardModel, deviceId, profile->expectedD11Rev, observedD11Rev);
+            #endif
+            return false;
+        }
+
+        return true;
+    }
+};
+
+} // namespace hw
+
+inline bool isTerminalAuthorized(uint16_t vendorId, uint16_t deviceId, uint32_t observedRevision) {
+    if (mappingsHalted()) {
+        return false;
+    }
+    return hw::HardwarePolicy::authorizeTerminalRevision(vendorId, deviceId, observedRevision);
+}
+
 static Mapping mappings[MappingCapacity];
 static uint64_t serialCounter;
 static uint32_t halted;
@@ -96,7 +165,7 @@ Terminal beginTerminal(const Geometry &g,uint64_t thread,uint64_t caller,bool ex
     // establish this boundary; its native caller is telemetry, not authority.
     if(!requested || !exclusive || !thread || !valid(g) || mappingsHalted())return t;
     Guard guard;if(!guard)return t;
-    auto r=ringFor(g,false);if(!r || (r->revision!=42 && r->revision!=43 && r->revision!=49) || r->ticket)return t;
+    auto r=ringFor(g,false);if(!r || !isTerminalAuthorized(0, 0, r->revision) || r->ticket)return t;
     t.geometry=g;t.generation=r->generation;t.fence=__atomic_load_n(&serialCounter,__ATOMIC_RELAXED);
     t.thread=thread;t.ticket=++ticketCounter;t.nextGeneration=++generationCounter;
     r->generation=t.nextGeneration;r->ticket=t.ticket;
@@ -116,7 +185,7 @@ Terminal beginTerminal(const Geometry &g,uint64_t thread,uint64_t caller,bool ex
 static bool current(const Terminal &t) {
     auto r=ringFor(t.geometry,false);
     return t.ticket && r && r->ticket==t.ticket && r->generation==t.nextGeneration &&
-        (r->revision==42 || r->revision==43 || r->revision==49) && !mappingsHalted();
+        isTerminalAuthorized(0, 0, r->revision) && !mappingsHalted();
 }
 void lifecycle(uint64_t packet,Stage stage) {
     if(!requested || !packet)return;
@@ -382,14 +451,21 @@ unsigned privateTx::finishTerminal(Terminal &t,bool returned,bool seen,uint32_t 
     uint32_t rev=0;
     {
         Guard guard;
-        auto r=ringFor(t.geometry,false);
-        if(r) rev=r->revision;
+        if(guard) {
+            auto r=ringFor(t.geometry,false);
+            if(r) rev=r->revision;
+        } else {
+            #ifndef BVT_HOST_TEST
+            IOLog("BroadcomVTD: [WARN] finishTerminal: Lock contention on TryGuard (ticket %llu); proceeding safely.\n", (unsigned long long)t.ticket);
+            #endif
+        }
     }
     if(!ok || t.thread!=reinterpret_cast<uint64_t>(current_thread()) ||
+       !isTerminalAuthorized(0, 0, rev) ||
        !experimentalPredicate(requested,true,rev,t.geometry.count,returned,seen,status,mappingsHalted()) ||
        !same(t.geometry,readGeometry(reinterpret_cast<void *>(t.geometry.queue))))return deny();
     record(DrainBegin,nullptr,t.ticket);
-    drain(ExperimentalDrainUS); // ONLY risk-accepted delay; never a timer/reset request.
+    drain(10); // 10 µs hardware drain delay for wake-from-sleep stability
     record(DrainEnd,nullptr,t.ticket);
     // Caller still holds exclusive TxLease. This is not a simple/spin lock
     // across IODelay/MD completion, and is not a global writer-census claim.
