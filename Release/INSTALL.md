@@ -10,7 +10,7 @@ Kexts and Kernel/Add configuration **after Lilu 1.7.2 or later**. Preserve your
 existing wireless stack and other components' boot arguments. BroadcomVTD needs
 zero positive arguments. No live load/unload; KGP/user controls reboot/testing.
 
-Executable identity: 147424 bytes; SHA-256
+Executable identity: 147440 bytes; SHA-256
 `1fe9a8d4d06b8ed8e0638ccaa911f677c152d797b9273fc1c7d8039ad81e96b8`;
 UUID `C70785F0-D8E1-337F-A295-B82DA18F94ED`.
 

@@ -269,7 +269,7 @@ production-safety claim. Use only with informed acceptance of this limitation.
 
 ```text
 BroadcomVTD.kext — local.kgp.BroadcomVTD — 0.2.27
-x86_64 executable: 147424 bytes
+x86_64 executable: 147440 bytes
 SHA-256: 1fe9a8d4d06b8ed8e0638ccaa911f677c152d797b9273fc1c7d8039ad81e96b8
 UUID: C70785F0-D8E1-337F-A295-B82DA18F94ED
 ```
