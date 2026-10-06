@@ -1,6 +1,6 @@
 # BroadcomVTD-Tahoe v0.2.27 — Expanded Broadcom Hardware Support
 
-BroadcomVTD-Tahoe v0.2.27 expands hardware support for Broadcom BCM4352 (`14e4:43b1`) and Apple / Fenvi BCM94360 / ASUSTeK BCM4360 (`14e4:43a0`).
+BroadcomVTD-Tahoe v0.2.27 expands hardware support for Broadcom BCM4352 (`14e4:43b1`) and Apple / Fenvi BCM94360CS2 / BCM94360CD / ASUSTeK BCM4360 (`14e4:43a0`).
 
 ## Key Changes in v0.2.27
 
