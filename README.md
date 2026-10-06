@@ -17,7 +17,7 @@ BroadcomVTD-Tahoe; the actual extension remains **BroadcomVTD.kext**, bundle ID
 `local.kgp.BroadcomVTD`. This exact tested binary retains version **0.2.27**;
 there was no cosmetic 1.0.0 rename or rebuild.
 
-[Download the official v0.2.27 release](https://github.com/kgp-macPro/BroadcomVTD-Tahoe/releases/tag/v0.2.27).
+[Download the unofficial release v0.2.27](https://github.com/YBronst/BroadcomVTD-Tahoe/releases/tag/v0.2.27).
 Its official ZIP contains the exact physically tested **BroadcomVTD.kext**.
 GitHub Actions CI artifacts are not substitutes.
 
@@ -135,8 +135,10 @@ does not create a mapper. These are distinct layers—not Apple “normal” and
 
 | Component | Tested configuration |
 | --- | --- |
-| Motherboard | ASUS WS X299 Sage/10G |
-| Wi-Fi | BCM943602CDP / BCM94360 / BCM94352HMB (PCI `14e4:43ba`, `14e4:43a0`, `14e4:43a3`, `14e4:43b1`), D11 rev42/rev43/rev49 |
+| Motherboard | Asrock-Z690-PG-Riptide |
+| Wi-Fi | BCM94360 (0x43A0 / rev 42, BCM943602, 0x43BA / rev 49).
+2. Fixed thread synchronization gap in finishTerminal() by wrapping ring revision access in an if(guard) check and logging lock contention via IOLog.
+3. Updated hardware drain delay to 10 µs for wake-from-sleep (S3/S4) stability on Fenvi/OEM modules. |
 | macOS | **Tahoe 26.6.2 (25G83)**; project scope: Tahoe / Darwin 25.x |
 | Wireless restoration | **OCLP-CustoMac 3.0.3 with Modern Wireless root patches** |
 | Lilu | 1.7.2 used for physical validation |
