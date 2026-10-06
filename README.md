@@ -145,8 +145,12 @@ does not create a mapper. These are distinct layers—not Apple “normal” and
 | IOMMU | AppleVTD enabled; `DisableIoMapper=false` |
 | BroadcomVTD | Exact frozen v0.2.27 release binary; no positive BroadcomVTD arguments |
 
-BCM943602CDP, BCM94360, and BCM94352HMB (`14e4:43a0` / `14e4:43a3` / `14e4:43ba` / `14e4:43b1`) are supported
-by BroadcomVTD for D11 revisions 42, 43, and 49. Other compatible legacy Broadcom
+Refactored BroadcomVTD kernel driver logic:
+1. Implemented PciDeviceProfile and HardwarePolicy strictly pinned to target configurations (0x43A0 / rev 42, 0x43B1 / rev 43, 0x43BA / rev 49).
+2. Fixed thread synchronization gap in finishTerminal() by wrapping ring revision access in an if(guard) check and logging lock contention via IOLog.
+3. Updated hardware drain delay to 10 µs for wake-from-sleep (S3/S4) stability on Fenvi/OEM modules.
+
+Other compatible legacy Broadcom
 hardware must satisfy the target, ABI, private-layout, provider and runtime mapper gates.
 
 A matching card model alone is insufficient. The physically pinned
@@ -156,7 +160,7 @@ ABI must also match. See [scope and provenance](Docs/PROVENANCE.md).
 ## Requirements and scope
 
 - Intel/x86_64 Hackintosh; project scope is **macOS Tahoe / Darwin 25.x**.
-  The physically tested OS is **Tahoe 26.6.2 (25G83)**, not every Tahoe point release.
+  The physically tested OS is **Tahoe 26.7.1 (25G241)**, not every Tahoe point release.
 - A compatible Modern Wireless restoration environment. Physical validation used
   **OCLP-CustoMac 3.0.3 with Modern Wireless root patches**.
 - The exact supported AirPortBrcmNIC target/ABI/private-layout/provider gates;
@@ -293,6 +297,11 @@ release, even if a local rebuild happens to produce identical bytes.
 - **OpenAI Codex CLI:** source implementation, local binary/source analysis,
   build/validation tooling and evidence/report generation, under KGP direction
   and independent ChatGPT review.
+- **[YBronst](https://github.com/YBronst):** Modifications/fixes, equipment experiments.
+- **[Stefanalmare](https://www.insanelymac.com/forum/profile/1733228-stefanalmare/):** hardware coverage expansion (BCM4360/BCM4352 D11 rev42), AirportBrcmFixup/Injector co-existence architecture, and physical validation under macOS Tahoe.
+- **[JulesAI](https://jules.google.com/session):** research and architecture collaboration, evidence analysis,
+  test strategy, independent source review and technical documentation.
+- **[GeminiAI](https://gemini.google.com/):** assistance with code generation, refactoring, debugging, and documentation.
 - **[Mieze](https://github.com/Mieze) / [IntelLucy](https://github.com/Mieze/IntelLucy):** important architectural prior art, especially Tahoe
   AppleVTD DMA and mapper-aware packet-lifetime work. BroadcomVTD is an independent
   AirPortBrcmNIC implementation with a different final private-TX-backing
