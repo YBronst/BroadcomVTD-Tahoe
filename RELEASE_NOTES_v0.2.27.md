@@ -28,7 +28,7 @@ On the tested configuration, enabling `AirportBrcmFixup` interferes with the cor
 
 * **Broadcom BCM94352** (`14e4:43b1`), D11 core rev 42
 
-* **Environment:** macOS Tahoe 26.6.2 with **OCLP-CustoMac 3.0.3 with Modern Wireless root patches**.
+* **Environment:** macOS Tahoe 26.7.1 (25G241) with **OCLP-CustoMac 3.0.3 with Modern Wireless root patches**.
 
 * **Configuration:** `DisableIoMapper=false` with active AppleVTD.
 

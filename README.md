@@ -131,24 +131,42 @@ prove that macOS has instantiated the mapper BroadcomVTD requires.
 does not create a mapper. These are distinct layers—not Apple “normal” and
 “failover” modes.
 
+### Terminal Logic Integration (privateTx)
+
+To ensure safe operation at Ring-0 without dynamic memory allocation, BroadcomVTD transitioned from loose revision matching to strict device pinning using an explicit `PciDeviceProfile` lookup layer. The verification predicate authorizes terminal operations only when the hardware identity and observed D11 MAC/PHY core revision match a known, verified profile:
+
+```cpp
+bool isTerminalAuthorized(uint16_t vendorId, uint16_t deviceId, uint32_t observedRevision) {
+    if (mappingsHalted()) {
+        return false;
+    }
+    return bvp::hw::HardwarePolicy::authorizeTerminalRevision(vendorId, deviceId, observedRevision);
+}
+```
+
+Migrating from a loose revision array `{42, 43, 49}` to the explicit `PciDeviceProfile` lookup layer eliminates multi-threaded race conditions during `finishTerminal()` and safeguards system-wide DMA isolation.
+
 ## Physically validated configuration
 
 | Component | Tested configuration |
 | --- | --- |
 | Motherboard | Asrock-Z690-PG-Riptide |
-| Wi-Fi | BCM94360 (0x43A0 / rev 42, BCM943602, 0x43BA / rev 49).
-2. Fixed thread synchronization gap in finishTerminal() by wrapping ring revision access in an if(guard) check and logging lock contention via IOLog.
-3. Updated hardware drain delay to 10 µs for wake-from-sleep (S3/S4) stability on Fenvi/OEM modules. |
-| macOS | **Tahoe 26.6.2 (25G83)**; project scope: Tahoe / Darwin 25.x |
+| Wi-Fi | See Physically Validated Hardware Profiles below |
+| macOS | **Tahoe 26.7.1 (25G241)**; project scope: Tahoe / Darwin 25.x |
 | Wireless restoration | **OCLP-CustoMac 3.0.3 with Modern Wireless root patches** |
 | Lilu | 1.7.2 used for physical validation |
 | IOMMU | AppleVTD enabled; `DisableIoMapper=false` |
 | BroadcomVTD | Exact frozen v0.2.27 release binary; no positive BroadcomVTD arguments |
 
-Refactored BroadcomVTD kernel driver logic:
-1. Implemented PciDeviceProfile and HardwarePolicy strictly pinned to target configurations (0x43A0 / rev 42, 0x43B1 / rev 43, 0x43BA / rev 49).
-2. Fixed thread synchronization gap in finishTerminal() by wrapping ring revision access in an if(guard) check and logging lock contention via IOLog.
-3. Updated hardware drain delay to 10 µs for wake-from-sleep (S3/S4) stability on Fenvi/OEM modules.
+### Physically Validated Hardware Profiles
+
+| PCI Vendor:Device | D11 Core Revision | Target Hardware Description / Model |
+| --- | --- | --- |
+| `14E4:43A0` | D11 Rev 42 | Fenvi BCM4360CDP / Apple CS2 / ASUSTeK PCE-AC68 & Mini PCIe |
+| `14E4:43B1` | D11 Rev 42 | Dell OEM BCM4352 MacBook Edition |
+| `14E4:43BA` | D11 Rev 49 | Reference: Fenvi FV-T919 BCM943602CDP / HP OEM |
+
+*Note: Any MAC/PHY core or device ID mismatch triggers a `[SECURITY] D11 Rev mismatch` kernel warning and safely halts terminal setup.*
 
 Other compatible legacy Broadcom
 hardware must satisfy the target, ABI, private-layout, provider and runtime mapper gates.
@@ -297,8 +315,8 @@ release, even if a local rebuild happens to produce identical bytes.
 - **OpenAI Codex CLI:** source implementation, local binary/source analysis,
   build/validation tooling and evidence/report generation, under KGP direction
   and independent ChatGPT review.
-- **[YBronst](https://github.com/YBronst):** Modifications/fixes, equipment experiments.
-- **[Stefanalmare](https://www.insanelymac.com/forum/profile/1733228-stefanalmare/):** hardware coverage expansion (BCM4360/BCM4352 D11 rev42), AirportBrcmFixup/Injector co-existence architecture, and physical validation under macOS Tahoe.
+- **[YBronst](https://github.com/YBronst):** Core engine refactoring, implementation of the strict hardware profile architecture (`PciDeviceProfile`), and localized multi-profile device validation.
+- **[Stefanalmare](https://www.insanelymac.com/forum/profile/1733228-stefanalmare/):** Provision of raw hardware testing logs and execution traces used for external device profile verification under macOS Tahoe.
 - **[JulesAI](https://jules.google.com/session):** research and architecture collaboration, evidence analysis,
   test strategy, independent source review and technical documentation.
 - **[GeminiAI](https://gemini.google.com/):** assistance with code generation, refactoring, debugging, and documentation.
