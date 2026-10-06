@@ -3,7 +3,7 @@
 ## v0.2.27 — 2026-09-21
 
 - Added Lilu `routeMultipleLong` multiroute integration to ensure conflict-free coexistence with `AirportBrcmFixup`.
-- Added support for Broadcom BCM94352HMB / BCM4352 (`14e4:43b1`, rev 3, D11 core rev 43).
+- Added support for Broadcom BCM94352HMB / BCM4352 (`14e4:43b1`, rev 3, D11 core rev 42).
 - Cleanly separated responsibilities: BroadcomVTD focuses on DMA/VTD stability; AirportBrcmFixup manages Wi-Fi injection, ASPM, country code, and ARPT renaming.
 
 ## v0.2.25 — 2026-09-18

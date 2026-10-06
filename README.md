@@ -163,7 +163,7 @@ Migrating from a loose revision array `{42, 43, 49}` to the explicit `PciDeviceP
 | PCI Vendor:Device | D11 Core Revision | Target Hardware Description / Model |
 | --- | --- | --- |
 | `14E4:43A0` | D11 Rev 42 | Fenvi BCM4360CDP / Apple CS2 / ASUSTeK PCE-AC68 & Mini PCIe |
-| `14E4:43B1` | D11 Rev 43 | Dell OEM BCM4352 MacBook Edition |
+| `14E4:43B1` | D11 Rev 42 | Dell OEM BCM4352 MacBook Edition |
 | `14E4:43BA` | D11 Rev 49 | Reference: Fenvi FV-T919 BCM943602CDP / HP OEM |
 
 *Note: Any MAC/PHY core or device ID mismatch triggers a `[SECURITY] D11 Rev mismatch` kernel warning and safely halts terminal setup.*

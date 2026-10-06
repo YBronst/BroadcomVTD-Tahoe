@@ -4,7 +4,7 @@ BroadcomVTD-Tahoe v0.2.27 expands hardware support for Broadcom BCM4352 (`14e4:4
 
 ## Key Changes in v0.2.27
 
-* **Expanded Hardware Support:** Added and physically tested support for BCM94352HMB / BCM4352 (PCI ID `14e4:43b1`, D11 core rev 43).
+* **Expanded Hardware Support:** Added and physically tested support for BCM94352HMB / BCM4352 (PCI ID `14e4:43b1`, D11 core rev 42).
 
 * **Additional BCM94360 Support:** Added and physically tested support for Apple/Fenvi BCM94360 / ASUSTeK BCM4360 (PCI IDs `14e4:43a0`, D11 core rev 42).
 
@@ -26,7 +26,7 @@ On the tested configuration, enabling `AirportBrcmFixup` interferes with the cor
 
 * **Apple / Fenvi BCM94360 / ASUSTeK BCM4360** (`14e4:43a0`), D11 rev 42
 
-* **Broadcom BCM94352** (`14e4:43b1`), D11 core rev 43
+* **Broadcom BCM94352** (`14e4:43b1`), D11 core rev 42
 
 * **Environment:** macOS Tahoe 26.7.1 (25G241) with **OCLP-CustoMac 3.0.3 with Modern Wireless root patches**.
 
